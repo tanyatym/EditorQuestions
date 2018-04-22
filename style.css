@@ -7,7 +7,6 @@ body{
 header .title{
     display: flex;
     flex-wrap: nowrap;
-    /*align-content: stretch;*/
     flex-grow: 1;
     font-weight: normal;
 }
@@ -74,7 +73,7 @@ button.plusQ, button.minusQ{
 }
 
 .question-content{
-    border: 1px dashed #ccc    
+    border-bottom: 1px dashed #ccc    
 }
 .type-answers{
    font-size: 30px;

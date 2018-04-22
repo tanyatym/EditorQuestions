@@ -3,7 +3,14 @@ Vue.component('question', {
 		data:  function(){
 			return {
 				text: this.questionData.text,
-				answers: []
+				answers: [],
+				answerTypes: {
+					list:"Список",
+					range:"Шкала",
+					number:"Число",
+					text:"Текст"
+				},
+				answerType: null
 			}
 		},
 		template: '#question',

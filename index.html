@@ -6,7 +6,7 @@
     <title>jQuery UI Sortable - Connect lists</title>
     <link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  
+   
 
     <script src="jquery.js"></script>
     <script src="jquery-ui/jquery-ui.js"></script>
@@ -14,7 +14,10 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="Model.js"></script>
     <script src="groupCompanent.js"></script>
-    <script src="questionCompanent.js"></script>
+	<script src="questionCompanent.js"></script>
+	<!-- <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">--> 
+	<!-- import iView -->
+	<!-- <script src="//unpkg.com/iview/dist/iview.min.js"></script>	 --> 
 
 
 </head>
@@ -71,21 +74,19 @@
         <header>
             <textarea class="input-question" v-model="text"></textarea>
             <button class="minus" @click="askDelMyself">×</button>
-        </header>
-        <div class="type-answers">
-        	<ul>
-	        	<li v-for="(item, index) in answers" 
-					:key="index" 
-					>
+		</header>
+		<select v-model="answerType">
+			<option v-for="(lable, key) in answerTypes" :value="key" :key="key">{{ lable }}</option>
+		</select>
 
-					<textarea v-model="answers[index]">
-	        		</textarea>
-					<button class="minusQ" @click="askDelMyself">×</button>
+		<div class="answerForm">
+			<h1 v-if="answerType == 'list'">{{answerTypes.list}}</h1>
+			<h1 v-if="answerType == 'range'">{{answerTypes.range}}</h1>
+			<h1 v-if="answerType == 'number'">{{answerTypes.number}}</h1>
+			<h1 v-if="answerType == 'text'">{{answerTypes.text}}</h1>
 
-	        		
-	        	</li>
-        	</ul>   	
-        </div>
+		</div>
+
         
 
     </div>
