@@ -1,6 +1,18 @@
 body{
     font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
+h1{
+    font-size: 24px;
+    align-self: center;
+    padding: 3px;
+}
+h2{
+    font-size: 18px;
+}
+h3{
+    font-size: 14px;
+    padding: 0 3px 0 3px
+}
 *{
     box-sizing: border-box;
 }
@@ -75,6 +87,10 @@ button.plusQ, button.minusQ{
 .question-content{
     border-bottom: 1px dashed #ccc    
 }
+select.question-content{
+    right: 50%;
+    padding: 3px;
+}
 .type-answers{
    font-size: 30px;
    color: black;
@@ -82,4 +98,13 @@ button.plusQ, button.minusQ{
    flex-wrap: nowrap;
    flex-grow: 1;
    font-weight: normal; 
+}
+.answerForm{
+    border: 1px dashed #ccc;
+}
+.answerTypeRange{
+    display: flex;
+    flex-wrap: nowrap; 
+    flex-grow: 1;
+    font-weight: normal;
 }

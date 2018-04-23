@@ -72,16 +72,27 @@
 <template id="question">
     <div class="question-content">
         <header>
-            <textarea class="input-question" v-model="text"></textarea>
-            <button class="minus" @click="askDelMyself">×</button>
+			<textarea class="input-question" v-model="text"></textarea>
+			<button class="minus" @click="askDelMyself">×</button>
 		</header>
+		<!-- <Switch v-model="switch1" @on-change="change"></Switch> -->
 		<select v-model="answerType">
 			<option v-for="(lable, key) in answerTypes" :value="key" :key="key">{{ lable }}</option>
 		</select>
 
 		<div class="answerForm">
 			<h1 v-if="answerType == 'list'">{{answerTypes.list}}</h1>
-			<h1 v-if="answerType == 'range'">{{answerTypes.range}}</h1>
+			
+			<div class="answerTypeRange" v-if="answerType == 'range'" >
+				<h2> {{answerTypes.range}} </h2>
+				<h2> c </h2>
+				<input class="input-number" v-model="min"/>
+				<h2> по </h2>
+				<input class="input-number" v-model="max"/>
+				<h2> шаг </h2>
+				<input class="input-number" v-model="step"/>
+			</div>
+
 			<h1 v-if="answerType == 'number'">{{answerTypes.number}}</h1>
 			<h1 v-if="answerType == 'text'">{{answerTypes.text}}</h1>
 
@@ -99,7 +110,7 @@
 		el:   '#app',
 		data: {
 			title:      'АНКЕТА',
-			collection: [
+			collection: []
 				// {
 				// 	type:       "group",
 				// 	name:       'GROUP 1',
@@ -110,7 +121,7 @@
 
 				// }
 				
-			]
+			// ]
 		}
 	})
 

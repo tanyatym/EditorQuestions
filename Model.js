@@ -14,6 +14,7 @@ function AnswerFormRange() {
 	this.type = "range"
 	this.min = 0
 	this.max = 100
+	this.step = 1
 }
 function AnswerFormNumber(){
 	this.type = "number"
