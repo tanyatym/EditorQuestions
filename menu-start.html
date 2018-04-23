@@ -12,15 +12,12 @@
   <script  src = "https://cdn.jsdelivr.net/npm/vue/dist/vue.js" ></script>
   <!-- <script src="Model.js"></script> -->
   
-  
 </head>
 	<body>
 		<div id="app"> 
 			<q-group :orig-name="title" :orig-collection="collection">
 			</q-group>
 		</div>
-
-		 	 
 
 		 <template id="group">
   			<div class="group">
@@ -34,14 +31,12 @@
 		  	</div>
 		</template>
 
-
 		<template id="question">
   			<div class="question">
 			    <h1>{{ text }}</h1>
 			    
 		  	</div>
 		</template>
-
 				
 		<script type="text/javascript">
 			Vue.component('q-group', {
@@ -85,13 +80,12 @@
 			    	{
 			    		type:"question",
 			    		text:"как пройти в библиотеку?"
-			    	},
-{
+						},
+						{
 			    		type:"question",
 			    		text:"как пройти в ресторан?"
 			    	}
 			    ]
-			    
 			  }
 			})
 
