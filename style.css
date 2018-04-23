@@ -10,7 +10,7 @@ header .title{
     flex-grow: 1;
     font-weight: normal;
 }
-header .title  input, header .title button{
+header .title  input{
     background: transparent;
     border: none;
 }
@@ -22,7 +22,7 @@ header .title  input, header .title button{
 }
 .group{
     margin-bottom: 50px;
-    border-bottom: 1px solid; 
+    /* border-bottom: 1px solid;  */
 }
 
 .question {
@@ -40,9 +40,6 @@ header .title  input, header .title button{
     width: 100%;
     font-size: 15px;
 }
-.input{
- 
-}
 
 header, footer{
     display: flex;
@@ -52,7 +49,7 @@ header{
    justify-content: space-between; 
 }
 
-button{
+/* button{
     width: 48px;
     height: 48px;
     background: white;
@@ -70,11 +67,8 @@ button.minus{
 
 button.plusQ, button.minusQ{
    border-radius: 50%; 
-}
+} */
 
-.question-content{
-    border-bottom: 1px dashed #ccc    
-}
 .type-answers{
    font-size: 30px;
    color: black;

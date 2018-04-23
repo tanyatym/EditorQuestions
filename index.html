@@ -3,69 +3,67 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>jQuery UI Sortable - Connect lists</title>
+    <title>Questionnair Editor</title>
     <link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-   
-
-    <script src="jquery.js"></script>
-    <script src="jquery-ui/jquery-ui.js"></script>
-
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+	
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="Model.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+	<script src="Model.js"></script>
     <script src="groupCompanent.js"></script>
 	<script src="questionCompanent.js"></script>
-	<!-- <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">--> 
-	<!-- import iView -->
-	<!-- <script src="//unpkg.com/iview/dist/iview.min.js"></script>	 --> 
-
-
+	
 </head>
 <body>
 <div id="app">
-    <q-group :orig-name="title" :orig-collection="collection" :id="0">
-    </q-group>
+    <q-group :orig-name="title" :orig-collection="collection" :id="0"/>
 </div>
 
-
 <template id="group">
-    <div class="group-content">
-        <header>
-            <div class="title"> 
-            	<button class="close" @click="open = !open">
-            		<span v-if="open">_</span>
-            		<span v-else="">></span>
-            	</button>
-            	<input class="input-group" v-model="name"/>
-            </div>
-            <button class="minus" @click="askDelMyself">×</button>
-        </header>
-        <div class="content" v-if="open">
-	        <div v-for="(item, index)  in collection" 
-	        	:key="(gIndex +'-'+ index)"
-	        	:class="item.type">
-	            <q-group
-	                v-if="item.type=='group'"
-	                :orig-name="item.name"
-	                :orig-collection="item.collection"
-	                :g-index="index"
-	                :id="(gIndex +'-'+ index)"
-	                v-on:delgroup="deleteFromCollection">
-	            </q-group>
-	            <question v-else="" 
-	            	class="question"
-	            	:index="index"
-	            	:question-data="item" 
-	            	v-on:delqustion="deleteFromCollection">
-	            </question>
-
-	        </div>
-	        <footer>
-	        	<button class="plusQ" @click="addQuestion">+</button>
-	        	<button class="plus" @click="addGroup">+</button>
-	        </footer>
-        </div>	
-    </div>
+	<section>
+	<header>
+		<el-row class="title"> 
+			<!-- <button class="close" @click="open = !open">
+				<span v-if="open">_</span>
+				<span v-else="">></span>
+			</button> -->
+			<input class="input-group" v-model="name"/>
+		</el-row>
+		<el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
+	</header>
+    <el-collapse class="group-content">
+        <!-- <el-collapse-item class="content" v-if="true"> -->
+		<el-collapse-item v-for="(item, index)  in collection" 
+			:title = "item.type + ' ' + (index + 1)"
+			:name = "index"
+			:key="(gIndex +'-'+ index)"
+			:class="item.type">
+			<q-group
+				v-if="item.type=='group'"
+				:orig-name="item.name"
+				:orig-collection="item.collection"
+				:g-index="index"
+				:id="(gIndex +'-'+ index)"
+				v-on:delgroup="deleteFromCollection">
+			</q-group>
+			<question v-else="" 
+				class="question"
+				:index="index"
+				:question-data="item" 
+				v-on:delqustion="deleteFromCollection">
+			</question>
+		</el-collapse-item>
+        <!-- </el-collapse>	 -->
+    </el-collapse>
+	<footer>
+		<el-button  icon="el-icon-edit-outline" class="plusQ" @click="addQuestion">Добавить Вопрос</el-button>
+		<el-button  icon="el-icon-menu" class="plus" @click="addGroup">Добавить Раздел</el-button>
+	</footer>
+    </section>
 </template>
 
 
@@ -73,22 +71,18 @@
     <div class="question-content">
         <header>
             <textarea class="input-question" v-model="text"></textarea>
-            <button class="minus" @click="askDelMyself">×</button>
+            <el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
 		</header>
-		<select v-model="answerType">
-			<option v-for="(lable, key) in answerTypes" :value="key" :key="key">{{ lable }}</option>
-		</select>
+		<el-select v-model="answerType" placeholder="Тип Ответа">
+			<el-option v-for="(lable, key) in answerTypes" :value="key" :key="key">{{ lable }}</el-option>
+		</el-select>
 
 		<div class="answerForm">
 			<h1 v-if="answerType == 'list'">{{answerTypes.list}}</h1>
 			<h1 v-if="answerType == 'range'">{{answerTypes.range}}</h1>
 			<h1 v-if="answerType == 'number'">{{answerTypes.number}}</h1>
 			<h1 v-if="answerType == 'text'">{{answerTypes.text}}</h1>
-
 		</div>
-
-        
-
     </div>
 </template>
 
@@ -100,21 +94,19 @@
 		data: {
 			title:      'АНКЕТА',
 			collection: [
-				// {
-				// 	type:       "group",
-				// 	name:       'GROUP 1',
-				// 	collection: [{
-				// 		type: "question",
-				// 		text: "как тебя зовут?"
-				// 	}]
-
-				// }
+				{
+					type:       "group",
+					name:       'GROUP 1',
+					collection: [{
+						type: "question",
+						text: "как тебя зовут?"
+					}]
+				}
 				
 			]
 		}
 	})
 
 </script>
-<!-- <script src="Editor.js"></script> -->
 </body>
 </html>
