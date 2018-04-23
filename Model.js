@@ -3,10 +3,20 @@ function Question(){
 	this.text = ""
 	this.answerForm = null
 	this.hasUserAnswer = false
+
+}
+function anserFormByType(type){
+	switch (type){
+		case "number": return new AnswerFormNumber()
+		case "range": return new AnswerFormRange()
+		case "list": return new AnswerFormList()
+		default: return new AnswerFormText()
+	}
 }
 
 function AnswerFormList() {
 	this.type = "list"
+	this.contentType = "text"
 	this.list = []
 	this.multyple = false
 }
@@ -25,7 +35,6 @@ function AnswerFormText(){
 	this.value = ""
 }
  
-
 function QGroup(title){
 	this.name = "Новая группа"
 	this.type = 'group'

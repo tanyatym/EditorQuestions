@@ -95,6 +95,8 @@ button.plusQ, button.minusQ{
 .answer-type-range{
     display: flex;
     flex-wrap: nowrap; 
-    flex-grow: 1;
     font-weight: normal;
+}
+.answer-type-range > *{
+    flex-grow: 0;
 }

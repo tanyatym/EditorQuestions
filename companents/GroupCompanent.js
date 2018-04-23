@@ -5,7 +5,8 @@ Vue.component('q-group', {
 		return {
 			name: this.origName,
 			collection: this.origCollection,
-			open: true
+			open: true,
+			activeNames: Array.from(this.origCollection.keys())
 		}
 	},
 
@@ -29,6 +30,7 @@ Vue.component('q-group', {
 	watch: {
 		origCollection: function() {
 			this.collection = this.origCollection
+			this.activeNames = Array.from(this.origCollection.keys())
 		},
 		origName: function() {
 			this.name = this.origName

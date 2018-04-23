@@ -17,6 +17,9 @@
     <script src="companents/GroupCompanent.js"></script>
 	<script src="companents/QuestionCompanent.js"></script>
 	<script src="companents/AnswerRangeCompanent.js"></script>
+	<script src="companents/AnswerNumberCompanent.js"></script>
+	<script src="companents/AnswerTextCompanent.js"></script>
+	<script src="companents/AnswerListCompanent.js"></script>
 	
 </head>
 <body>
@@ -79,18 +82,31 @@
 		</el-select>
 
 		<div class="answerForm">
-			<answer-range v-if="answerType == 'range'" 
-				:r-min = "answerForm.min" 
-				:r-max = "answerForm.max" 
-				:r-step = "answerForm.step">
-			</answer-range> 
-
-			<h1 v-if="answerType == 'list'">{{answerTypeLables.list}}</h1>
-			
-			<h1 v-if="answerType == 'number'">{{answerTypeLables.number}}</h1>
-			<h1 v-if="answerType == 'text'">{{answerTypeLables.text}}</h1>
+			<component v-bind:is="currentAnswerComponent" :data="answerForm"></component>
 		</div>
     </div>
+</template>
+
+<template id="answer-type-number">
+	<div class="answer-type number">
+		<el-input-number  class="input-number" v-model="value">
+	</div>
+</template>
+
+<template id="answer-type-text">
+	<div class="answer-type text">
+		<el-input placeholder="Введите ответ" v-model="value"></el-input>
+	</div>
+</template>
+
+<template id="answer-type-list">
+	<div class="answer-type list">
+		<ul>
+			<li v-for="item in list">
+				<component v-bind:is="currentAnswerComponent" :data="item"></component>
+			</li>
+		</ul>
+	</div>
 </template>
 
 <template id="answer-type-range">
@@ -129,10 +145,24 @@
 						type: "question",
 						text: "как тебя зовут?",
 						answerForm:{
-							min: 10,
-							max: 200,
-							step: 33,
-							type: "list"
+							type: "list",
+							contentType: "text",
+							multyple: false,
+							list: [
+								{
+									type: "text",
+									value: "лабудень 1"
+								},
+								{
+									type: "text",
+									value: "лабудень 2"
+								},
+								{
+									type: "text",
+									value: "лабудень 3"
+								}
+							],
+							
 						}
 					}]
 				}
