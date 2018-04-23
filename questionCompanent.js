@@ -1,37 +1,41 @@
 Vue.component('question', {
-		props: ['questionData', 'index'],
-		data:  function(){
-			return {
-				text: this.questionData.text,
-				answers: [],
-				answerTypes: {
-					list:"Список",
-					range:"Шкала",
-					number:"Число",
-					text:"Текст"
-				},
-				answerType: null
-			}
-		},
-		template: '#question',
-
-		methods: {
-			addAnswer: function(){
-				this.collection.push('answer')
+	template: '#question',
+	
+	props: ['questionData', 'index'],
+	
+	data:  function(){
+		return {
+			text: this.questionData.text,
+			answers: [],
+			answerTypes: {
+				list:"Список",
+				range:"Шкала",
+				number:"Число",
+				text:"Текст"
 			},
-			askDelMyself: function(){
-				this.$emit('delqustion', this.index)
-
-			},
-
-			deleteAnswer: function( index ){
-				this.answers.splice(index, 1)
-			}
+			answerType: null
+		}
+	},
+	
+	methods: {
+		addAnswer: function(){
+			this.collection.push('answer')
 		},
-		watch: {
-			questionData: function() {
-				this.text = this.questionData.text
-            },
-			
-        }
-	})
+		
+		askDelMyself: function(){
+			this.$emit('delqustion', this.index)
+
+		},
+
+		deleteAnswer: function( index ){
+			this.answers.splice(index, 1)
+		}
+	},
+
+	watch: {
+		questionData: function() {
+			this.text = this.questionData.text
+		},
+		
+	}
+})

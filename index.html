@@ -3,105 +3,116 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>jQuery UI Sortable - Connect lists</title>
+    <title>Questionnair Editor</title>
     <link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-   
-
-    <script src="jquery.js"></script>
-    <script src="jquery-ui/jquery-ui.js"></script>
-
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+	
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="Model.js"></script>
-    <script src="groupCompanent.js"></script>
-	<script src="questionCompanent.js"></script>
-	<!-- <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">--> 
-	<!-- import iView -->
-	<!-- <script src="//unpkg.com/iview/dist/iview.min.js"></script>	 --> 
 
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
+	<script src="Model.js"></script>
+    <script src="companents/GroupCompanent.js"></script>
+	<script src="companents/QuestionCompanent.js"></script>
+	<script src="companents/AnswerRangeCompanent.js"></script>
+	
 </head>
 <body>
 <div id="app">
-    <q-group :orig-name="title" :orig-collection="collection" :id="0">
-    </q-group>
+    <q-group :orig-name="title" :orig-collection="collection" :id="0"/>
 </div>
 
-
 <template id="group">
-    <div class="group-content">
-        <header>
-            <div class="title"> 
-            	<button class="close" @click="open = !open">
-            		<span v-if="open">_</span>
-            		<span v-else="">></span>
-            	</button>
-            	<input class="input-group" v-model="name"/>
-            </div>
-            <button class="minus" @click="askDelMyself">×</button>
-        </header>
-        <div class="content" v-if="open">
-	        <div v-for="(item, index)  in collection" 
-	        	:key="(gIndex +'-'+ index)"
-	        	:class="item.type">
-	            <q-group
-	                v-if="item.type=='group'"
-	                :orig-name="item.name"
-	                :orig-collection="item.collection"
-	                :g-index="index"
-	                :id="(gIndex +'-'+ index)"
-	                v-on:delgroup="deleteFromCollection">
-	            </q-group>
-	            <question v-else="" 
-	            	class="question"
-	            	:index="index"
-	            	:question-data="item" 
-	            	v-on:delqustion="deleteFromCollection">
-	            </question>
-
-	        </div>
-	        <footer>
-	        	<button class="plusQ" @click="addQuestion">+</button>
-	        	<button class="plus" @click="addGroup">+</button>
-	        </footer>
-        </div>	
-    </div>
+	<section>
+	<header>
+		<el-row class="title"> 
+			<!-- <button class="close" @click="open = !open">
+				<span v-if="open">_</span>
+				<span v-else="">></span>
+			</button> -->
+			<input class="input-group" v-model="name"/>
+		</el-row>
+		<el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
+	</header>
+    <el-collapse v-model="activeNames" class="group-content">
+        <!-- <el-collapse-item class="content" v-if="true"> -->
+		<el-collapse-item v-for="(item, index)  in collection" 
+			:title = "item.type + ' ' + (index + 1)"
+			:name = "index"
+			:key="(gIndex +'-'+ index)"
+			:class="item.type">
+			<q-group
+				v-if="item.type=='group'"
+				:orig-name="item.name"
+				:orig-collection="item.collection"
+				:g-index="index"
+				:id="(gIndex +'-'+ index)"
+				v-on:delgroup="deleteFromCollection">
+			</q-group>
+			<question v-else="" 
+				class="question"
+				:index="index"
+				:question-data="item" 
+				v-on:delqustion="deleteFromCollection">
+			</question>
+		</el-collapse-item>
+        <!-- </el-collapse>	 -->
+    </el-collapse>
+	<footer>
+		<el-button  icon="el-icon-edit-outline" class="plusQ" @click="addQuestion">Добавить Вопрос</el-button>
+		<el-button  icon="el-icon-menu" class="plus" @click="addGroup">Добавить Раздел</el-button>
+	</footer>
+    </section>
 </template>
 
 
 <template id="question">
     <div class="question-content">
         <header>
-			<textarea class="input-question" v-model="text"></textarea>
-			<button class="minus" @click="askDelMyself">×</button>
+            <textarea class="input-question" v-model="text"></textarea>
+            <el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
 		</header>
-		<!-- <Switch v-model="switch1" @on-change="change"></Switch> -->
-		<select v-model="answerType">
-			<option v-for="(lable, key) in answerTypes" :value="key" :key="key">{{ lable }}</option>
-		</select>
+		<el-select v-model="answerType" placeholder="Тип Ответа">
+			<el-option v-for="(lable, key) in answerTypeLables" :value="key" :key="key">{{ lable }}</el-option>
+		</el-select>
 
 		<div class="answerForm">
-			<h1 v-if="answerType == 'list'">{{answerTypes.list}}</h1>
+			<answer-range v-if="answerType == 'range'" 
+				:r-min = "answerForm.min" 
+				:r-max = "answerForm.max" 
+				:r-step = "answerForm.step">
+			</answer-range> 
+
+			<h1 v-if="answerType == 'list'">{{answerTypeLables.list}}</h1>
 			
-			<div class="answerTypeRange" v-if="answerType == 'range'" >
-				<h2> {{answerTypes.range}} </h2>
-				<h2> c </h2>
-				<input class="input-number" v-model="min"/>
-				<h2> по </h2>
-				<input class="input-number" v-model="max"/>
-				<h2> шаг </h2>
-				<input class="input-number" v-model="step"/>
-			</div>
-
-			<h1 v-if="answerType == 'number'">{{answerTypes.number}}</h1>
-			<h1 v-if="answerType == 'text'">{{answerTypes.text}}</h1>
-
+			<h1 v-if="answerType == 'number'">{{answerTypeLables.number}}</h1>
+			<h1 v-if="answerType == 'text'">{{answerTypeLables.text}}</h1>
 		</div>
-
-        
-
     </div>
 </template>
+
+<template id="answer-type-range">
+	<el-row class="answer-type-range" type="flex" :gutter="20">
+		<el-col >с
+			<el-input-number :key="1" class="input-number" v-model="min">
+				
+			</el-input-number>
+		</el-col>
+		<el-col >по
+			<el-input-number :key="2" class="input-number" v-model="max">
+				
+			</el-input-number>
+		</el-col>
+		<el-col>шаг
+			<el-input-number :key="3" class="input-number" v-model="step">
+				
+			</el-input-number>
+		</el-col>
+	</el-row>
+</template>
+
 
 
 <script type="text/javascript">
@@ -110,22 +121,26 @@
 		el:   '#app',
 		data: {
 			title:      'АНКЕТА',
-			collection: []
-				// {
-				// 	type:       "group",
-				// 	name:       'GROUP 1',
-				// 	collection: [{
-				// 		type: "question",
-				// 		text: "как тебя зовут?"
-				// 	}]
-
-				// }
+			collection: [
+				{
+					type:       "group",
+					name:       'GROUP 1',
+					collection: [{
+						type: "question",
+						text: "как тебя зовут?",
+						answerForm:{
+							min: 10,
+							max: 200,
+							step: 33,
+							type: "list"
+						}
+					}]
+				}
 				
-			// ]
+			]
 		}
 	})
 
 </script>
-<!-- <script src="Editor.js"></script> -->
 </body>
 </html>
