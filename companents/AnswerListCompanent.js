@@ -12,7 +12,7 @@ Vue.component('answer-list', {
 	},
 	computed: {
 		itemForm:function(){
-			return anserFormByType(this.contentType)
+			return answerFormByType(this.contentType)
 		},
 		currentAnswerComponent: function(){
 			return 'answer-' + this.contentType
@@ -20,6 +20,16 @@ Vue.component('answer-list', {
 	},
 
 	methods: {
+		addToList: function(){
+			this.list.push(answerFormByType(this.contentType))
+		},
+		deleteAnswer: function( index ){
+			this.list.splice(index, 1)
+			console.log(this.list)
+		},
+		updateAnswer:function(newData, index){
+			this.list[index]
+		}
 	},
 	watch: {
 		data: function() {

@@ -31,10 +31,6 @@
 	<section>
 	<header>
 		<el-row class="title"> 
-			<!-- <button class="close" @click="open = !open">
-				<span v-if="open">_</span>
-				<span v-else="">></span>
-			</button> -->
 			<input class="input-group" v-model="name"/>
 		</el-row>
 		<el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
@@ -77,7 +73,7 @@
             <textarea class="input-question" v-model="text"></textarea>
             <el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
 		</header>
-		<el-select v-model="answerType" placeholder="Тип Ответа">
+		<el-select v-model="answerType" v-on:input="updateAnswerForm" placeholder="Тип Ответа">
 			<el-option v-for="(lable, key) in answerTypeLables" :value="key" :key="key">{{ lable }}</el-option>
 		</el-select>
 
@@ -95,16 +91,21 @@
 
 <template id="answer-type-text">
 	<div class="answer-type text">
-		<el-input placeholder="Введите ответ" v-model="value"></el-input>
+		<el-input placeholder="Введите ответ" v-model="value" v-on:input="reportChange"></el-input>	
 	</div>
 </template>
 
 <template id="answer-type-list">
-	<div class="answer-type list">
-		<ul>
-			<li v-for="item in list">
-				<component v-bind:is="currentAnswerComponent" :data="item"></component>
+	<div class="answer-type list ">
+		<ul class="answer-list">
+			<li v-for="(item, index) in list">
+				<component v-bind:is="currentAnswerComponent" 
+				:data="item" 
+				v-on:update="function(v){ updateAnswer(v, index)}"
+				class="input-question"></component>
+				<el-button circle icon="el-icon-close" class="minus" @click="deleteAnswer(index)"/>
 			</li>
+			<el-button  icon="el-icon-edit-outline" class="plusQ" @click="addToList">Добавить вариант ответа</el-button>
 		</ul>
 	</div>
 </template>

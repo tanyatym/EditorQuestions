@@ -48,7 +48,7 @@ header .title  input{
     width: 100%;
     font-size: 25px;
 }
-.input-question {
+.input-question  {
     width: 100%;
     font-size: 15px;
 }
@@ -59,6 +59,10 @@ header, footer{
 }
 header{
    justify-content: space-between; 
+}
+ul.answer-list li{
+    display: flex; 
+    justify-content: space-between;
 }
 
 /* button{

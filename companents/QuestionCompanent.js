@@ -11,25 +11,17 @@ Vue.component('question', {
 				number:"Число",
 				text:"Текст"
 			},
-			answerType: this.questionData.answerForm ? this.questionData.answerForm.type : "text"
+			answerType: this.questionData.answerForm ? this.questionData.answerForm.type : "text",
+			answerForm: this.questionData.answerForm ? answerFormByType(this.answerType, this.questionData.answerForm) : new AnswerFormText()
 		}
-
+	},
 
 	computed:{
 		text: function(){
 			return this.questionData.text || ""
 		},
 		
-		answerForm: function(){
-			if (!this.questionData.answerForm) this.questionData.answerForm = new AnswerFormText()
-			if (this.questionData.answerForm.type == this.answerType) {
-				return this.questionData.answerForm 
-			}else {
-				console.log(anserFormByType(this.answerType)) 
-				return anserFormByType(this.answerType) 
-			}
-			return this.questionData.answerForm || null
-		},
+		
 		currentAnswerComponent: function(){
 			return 'answer-' + this.answerType
 		}
@@ -47,7 +39,10 @@ Vue.component('question', {
 
 		deleteAnswer: function( index ){
 			this.answers.splice(index, 1)
-		}
+		},
+		updateAnswerForm: function(){
+			this.answerForm = answerFormByType(this.answerType) 
+		},
 	},
 
 	// watch: {

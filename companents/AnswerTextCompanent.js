@@ -3,15 +3,18 @@ Vue.component('answer-text', {
 
 	props: ['data'],
 
-	data: function(){
+	data: function(){update
 		return {
 			value: this.data.value,
 	    }
 	},
 
 	methods: {
+		reportChange: function(){
+			thid.$emit("update", this.value)
+		}
 	},
 	watch: {
-		data: function() {this.value = this.data},
+		data: function() {this.value = this.data.value},
 	}
 })
