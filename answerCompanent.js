@@ -22,6 +22,9 @@ Vue.component('answer', {
 
 			deleteFromCollection: function( index ){
 				this.collection.splice(index, 1)
+			},
+			reportChange: function(){
+				this.$emit()
 			}
 		},
 		watch: {
