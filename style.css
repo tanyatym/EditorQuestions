@@ -1,6 +1,18 @@
 body{
     font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
+h1{
+    font-size: 24px;
+    align-self: center;
+    padding: 3px;
+}
+h2{
+    font-size: 18px;
+}
+h3{
+    font-size: 14px;
+    padding: 0 3px 0 3px
+}
 *{
     box-sizing: border-box;
 }
@@ -36,7 +48,7 @@ header .title  input{
     width: 100%;
     font-size: 25px;
 }
-.input-question {
+.input-question  {
     width: 100%;
     font-size: 15px;
 }
@@ -47,6 +59,10 @@ header, footer{
 }
 header{
    justify-content: space-between; 
+}
+ul.answer-list li{
+    display: flex; 
+    justify-content: space-between;
 }
 
 /* button{
@@ -76,4 +92,15 @@ button.plusQ, button.minusQ{
    flex-wrap: nowrap;
    flex-grow: 1;
    font-weight: normal; 
+}
+.answerForm{
+    border: 1px dashed #ccc;
+}
+.answer-type-range{
+    display: flex;
+    flex-wrap: nowrap; 
+    font-weight: normal;
+}
+.answer-type-range > *{
+    flex-grow: 0;
 }

@@ -14,8 +14,12 @@
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
 	<script src="Model.js"></script>
-    <script src="groupCompanent.js"></script>
-	<script src="questionCompanent.js"></script>
+    <script src="companents/GroupCompanent.js"></script>
+	<script src="companents/QuestionCompanent.js"></script>
+	<script src="companents/AnswerRangeCompanent.js"></script>
+	<script src="companents/AnswerNumberCompanent.js"></script>
+	<script src="companents/AnswerTextCompanent.js"></script>
+	<script src="companents/AnswerListCompanent.js"></script>
 	
 </head>
 <body>
@@ -27,15 +31,11 @@
 	<section>
 	<header>
 		<el-row class="title"> 
-			<!-- <button class="close" @click="open = !open">
-				<span v-if="open">_</span>
-				<span v-else="">></span>
-			</button> -->
 			<input class="input-group" v-model="name"/>
 		</el-row>
 		<el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
 	</header>
-    <el-collapse class="group-content">
+    <el-collapse v-model="activeNames" class="group-content">
         <!-- <el-collapse-item class="content" v-if="true"> -->
 		<el-collapse-item v-for="(item, index)  in collection" 
 			:title = "item.type + ' ' + (index + 1)"
@@ -73,18 +73,63 @@
             <textarea class="input-question" v-model="text"></textarea>
             <el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
 		</header>
-		<el-select v-model="answerType" placeholder="Тип Ответа">
-			<el-option v-for="(lable, key) in answerTypes" :value="key" :key="key">{{ lable }}</el-option>
+		<el-select v-model="answerType" v-on:input="updateAnswerForm" placeholder="Тип Ответа">
+			<el-option v-for="(lable, key) in answerTypeLables" :value="key" :key="key">{{ lable }}</el-option>
 		</el-select>
 
 		<div class="answerForm">
-			<h1 v-if="answerType == 'list'">{{answerTypes.list}}</h1>
-			<h1 v-if="answerType == 'range'">{{answerTypes.range}}</h1>
-			<h1 v-if="answerType == 'number'">{{answerTypes.number}}</h1>
-			<h1 v-if="answerType == 'text'">{{answerTypes.text}}</h1>
+			<component v-bind:is="currentAnswerComponent" :data="answerForm"></component>
 		</div>
     </div>
 </template>
+
+<template id="answer-type-number">
+	<div class="answer-type number">
+		<el-input-number  class="input-number" v-model="value">
+	</div>
+</template>
+
+<template id="answer-type-text">
+	<div class="answer-type text">
+		<el-input placeholder="Введите ответ" v-model="value" v-on:input="reportChange"></el-input>	
+	</div>
+</template>
+
+<template id="answer-type-list">
+	<div class="answer-type list ">
+		<ul class="answer-list">
+			<li v-for="(item, index) in list">
+				<component v-bind:is="currentAnswerComponent" 
+				:data="item" 
+				v-on:update="function(v){ updateAnswer(v, index)}"
+				class="input-question"></component>
+				<el-button circle icon="el-icon-close" class="minus" @click="deleteAnswer(index)"/>
+			</li>
+			<el-button  icon="el-icon-edit-outline" class="plusQ" @click="addToList">Добавить вариант ответа</el-button>
+		</ul>
+	</div>
+</template>
+
+<template id="answer-type-range">
+	<el-row class="answer-type-range" type="flex" :gutter="20">
+		<el-col >с
+			<el-input-number :key="1" class="input-number" v-model="min">
+				
+			</el-input-number>
+		</el-col>
+		<el-col >по
+			<el-input-number :key="2" class="input-number" v-model="max">
+				
+			</el-input-number>
+		</el-col>
+		<el-col>шаг
+			<el-input-number :key="3" class="input-number" v-model="step">
+				
+			</el-input-number>
+		</el-col>
+	</el-row>
+</template>
+
 
 
 <script type="text/javascript">
@@ -99,7 +144,27 @@
 					name:       'GROUP 1',
 					collection: [{
 						type: "question",
-						text: "как тебя зовут?"
+						text: "как тебя зовут?",
+						answerForm:{
+							type: "list",
+							contentType: "text",
+							multyple: false,
+							list: [
+								{
+									type: "text",
+									value: "лабудень 1"
+								},
+								{
+									type: "text",
+									value: "лабудень 2"
+								},
+								{
+									type: "text",
+									value: "лабудень 3"
+								}
+							],
+							
+						}
 					}]
 				}
 				
