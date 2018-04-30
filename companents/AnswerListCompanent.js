@@ -3,38 +3,28 @@ Vue.component('answer-list', {
 
 	props: ['data'],
 
-	data: function(){
+	data (){
 		return {
-			list: this.data ? this.data.list : [],
-			multyple: this.data ? this.data.multyple : false,
-			contentType: this.data ? this.data.contentType : "text"
+			answerList: new AnswerStructList(this.data)
 	    }
 	},
 	computed: {
-		itemForm:function(){
-			return answerFormByType(this.contentType)
-		},
-		currentAnswerComponent: function(){
-			return 'answer-' + this.contentType
-		}
+		componentNameOfContent (){ return 'answer-' + this.answerList.struct.contentType },
+		
+		list (){ return this.answerList.struct.list }
 	},
 
 	methods: {
-		addToList: function(){
-			this.list.push(answerFormByType(this.contentType))
+		addToList (){
+			this.$emit('update', this.answerList.addNewItem())
 		},
-		deleteAnswer: function( index ){
-			this.list.splice(index, 1)
-			console.log(this.list)
+
+		deleteAnswer ( index ){
+			this.$emit('update', this.answerList.deleteItem( index ))
 		},
-		updateAnswer:function(newData, index){
-			this.list[index]
+		
+		updateAnswer ( index, value ){
+			this.$emit('update', this.answerList.updateItem( index, value ))
 		}
-	},
-	watch: {
-		data: function() {
-			this.list = this.data.list
-			this.multyple = this.data.multyple
-		},
 	}
 })

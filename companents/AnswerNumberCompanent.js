@@ -3,18 +3,21 @@ Vue.component('answer-number', {
 
 	props: ['data'],
 
-	data: function(){
+	data (){
 		return {
-			value: this.data.value,
+			value: this.data.value || 0,
 	    }
 	},
 
+	computed: {
+		storableObject (){ 
+			return { type: "number", value: this.value }
+		}
+	},
+
 	methods: {
-	},
-	created: function(){
-		console.log(this.data)
-	},
-	watch: {
-		data: function() {this.value = this.data.value},
+		updateValue (){
+			this.$emit('update', this.storableObject )
+		}
 	}
 })

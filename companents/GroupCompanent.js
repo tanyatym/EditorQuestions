@@ -1,39 +1,49 @@
 Vue.component('q-group', {
-	props: ['origName', 'origCollection', 'gIndex', 'id'],
+	template: '#group',
 
+	props: [ 'structData' ],
+	
 	data: function(){
 		return {
-			name: this.origName,
-			collection: this.origCollection,
+			groupObj: new QGroup( this.structData ),
 			open: true,
-			activeNames: Array.from(this.origCollection.keys())
+			labels: {
+				question: 'Вопрос',
+				group: 'Группа',
+			}
 		}
 	},
 
-	template: '#group',
+	computed: {
+		name (){ return this.groupObj.struct.name }, 
+		collection (){ return this.groupObj.struct.collection },
+		activeNames:{ 
+			get (){ return Array.from(this.groupObj.struct.collection.keys()) },
+			set (newValue){ }
+		}
+	},
 
 	methods: {
+		updateName (event){
+			this.$emit( 'update', this.groupObj.update({ name: event.target.value }))
+		},
+
 		addGroup: function(){
-			this.collection.push(new QGroup())
+			const updated = this.groupObj.addToCollection( 'group' )
+			if( updated ) this.$emit( 'update', updated )
 		},
+		
 		addQuestion: function(){
-			this.collection.push(new Question())
-		},
-		askDelMyself: function(){
-			this.$emit('delgroup', this.gIndex)
+			const updated = this.groupObj.addToCollection( 'question' )
+			if( updated ) this.$emit( 'update', updated )
 		},
 
 		deleteFromCollection: function( index ){
-			this.collection.splice(index, 1)
-		}
-	},
-	watch: {
-		origCollection: function() {
-			this.collection = this.origCollection
-			this.activeNames = Array.from(this.origCollection.keys())
+			this.$emit( 'update', this.groupObj.deleteFromCollection( index ))
 		},
-		origName: function() {
-			this.name = this.origName
-		}
+
+		updateItem (index, newData) {
+			this.$emit( 'update', this.groupObj.updateItem( index, newData ))
+		},
 	}
 })

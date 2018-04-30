@@ -1,56 +1,42 @@
 Vue.component('question', {
 	template: '#question',
 	
-	props: ['questionData', 'index'],
+	props: [ 'structData' ],
 	
 	data:  function(){
 		return {
+			questionObj: new Question( this.structData ),
 			answerTypeLables: {
-				list:"Список",
-				range:"Шкала",
-				number:"Число",
-				text:"Текст"
+				list: "Список",
+				range: "Шкала",
+				number: "Число",
+				text: "Текст"
 			},
-			answerType: this.questionData.answerForm ? this.questionData.answerForm.type : "text",
-			answerForm: this.questionData.answerForm ? answerFormByType(this.answerType, this.questionData.answerForm) : new AnswerFormText()
 		}
 	},
 
 	computed:{
-		text: function(){
-			return this.questionData.text || ""
-		},
-		
-		
-		currentAnswerComponent: function(){
-			return 'answer-' + this.answerType
-		}
+		text (){ return this.questionObj.struct.text },
+		answerType (){ return this.questionObj.struct.answerType },
+		answerStruct (){ return this.questionObj.struct.answerStruct },
+		componentNameOfContent (){ return 'answer-' + this.answerType },
 	},
 
 	methods: {
-		addAnswer: function(){
-			this.collection.push('answer')
+		resetAnswerStruct: function( type ){
+			this.$emit( 'update', this.questionObj.resetAnswerStruct( type ))
 		},
 		
-		askDelMyself: function(){
-			this.$emit('delqustion', this.index)
-
+		updateText ( event ){
+			this.update({ text: event.target.value })
 		},
 
-		deleteAnswer: function( index ){
-			this.answers.splice(index, 1)
+		updateAnswerStruct ( newData ){
+			this.$emit( 'update', this.questionObj.updateAnswerStruct( newData ))
 		},
-		updateAnswerForm: function(){
-			this.answerForm = answerFormByType(this.answerType) 
-		},
-	},
 
-	// watch: {
-	// 	questionData: function() {
-	// 		this.text = this.questionData.text
-	// 		this.answerType = this.questionData.answerForm.type
-	// 		this.answerForm = this.questionData.answerForm
-	// 	}
-		
-	// }
+		update ( newData ){
+			this.$emit( 'update', this.questionObj.update( newData ))
+		}
+	}
 })

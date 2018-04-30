@@ -13,6 +13,10 @@ h3{
     font-size: 14px;
     padding: 0 3px 0 3px
 }
+
+header textarea{
+    font-size: 18px !important;
+}
 *{
     box-sizing: border-box;
 }
@@ -65,26 +69,6 @@ ul.answer-list li{
     justify-content: space-between;
 }
 
-/* button{
-    width: 48px;
-    height: 48px;
-    background: white;
-    border: 1px solid #ccc;
-    font-size: 25px;
-    line-height: 46px;
-    padding: 0;
-    font-weight: 300;
- 
-}
-button.minus{
-    background: transparent;
-    border: none;
-}
-
-button.plusQ, button.minusQ{
-   border-radius: 50%; 
-} */
-
 .type-answers{
    font-size: 30px;
    color: black;
@@ -103,4 +87,12 @@ button.plusQ, button.minusQ{
 }
 .answer-type-range > *{
     flex-grow: 0;
+}
+
+.el-collapse-item__content{
+    display: flex;
+    align-items: flex-start;
+}
+.el-collapse-item__content section, .question-content{
+    flex-grow: 1;
 }

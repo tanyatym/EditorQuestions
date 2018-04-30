@@ -11,13 +11,18 @@ Vue.component('answer-range', {
 		}
 	},
 
-	methods: {
-	},
-	watch: {
-		data: function() {
-			this.min = this.data.min
-			this.max = this.data.max
-			this.step = this.data.step
+	computed: {
+		storableObject (){ 
+			return { 
+				type: "number", 
+				value: this.value 
+			}
 		}
-	}	
+	},
+
+	methods: {
+		updateValue (){
+			this.$emit('update', this.storableObject )
+		}
+	}
 })
