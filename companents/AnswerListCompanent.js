@@ -26,9 +26,5 @@ Vue.component('answer-list', {
 		updateAnswer ( index, value ){
 			this.$emit('update', this.answerList.updateItem( index, value ))
 		}
-	},
-
-	watch: {
-		data () { this.answerList = new AnswerStructList(this.data) }
 	}
 })

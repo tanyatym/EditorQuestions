@@ -19,9 +19,5 @@ Vue.component('answer-number', {
 		updateValue (){
 			this.$emit('update', this.storableObject )
 		}
-	},
-
-	watch: {
-		data (){ this.value = this.data.value },
 	}
 })

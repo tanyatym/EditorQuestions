@@ -1,11 +1,11 @@
 Vue.component('question', {
 	template: '#question',
 	
-	props: ['questionData', 'index'],
+	props: [ 'structData' ],
 	
 	data:  function(){
 		return {
-			questionObj: new Question( this.questionData ),
+			questionObj: new Question( this.structData ),
 			answerTypeLables: {
 				list: "Список",
 				range: "Шкала",
@@ -23,10 +23,6 @@ Vue.component('question', {
 	},
 
 	methods: {
-		askDelMyself: function(){
-			this.$emit( 'delqustion', this.index )
-		},
-
 		resetAnswerStruct: function( type ){
 			this.$emit( 'update', this.questionObj.resetAnswerStruct( type ))
 		},
@@ -42,11 +38,5 @@ Vue.component('question', {
 		update ( newData ){
 			this.$emit( 'update', this.questionObj.update( newData ))
 		}
-	},
-
-	// watch: {
-	// 	questionData () {
-	// 		this.questionObj = new Question( this.questionData )
-	// 	}	
-	// }
+	}
 })

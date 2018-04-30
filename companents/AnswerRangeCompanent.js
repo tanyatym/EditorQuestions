@@ -24,13 +24,5 @@ Vue.component('answer-range', {
 		updateValue (){
 			this.$emit('update', this.storableObject )
 		}
-	},
-
-	watch: {
-		data: function() {
-			this.min = this.data.min
-			this.max = this.data.max
-			this.step = this.data.step
-		}
-	}	
+	}
 })

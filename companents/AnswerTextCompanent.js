@@ -18,9 +18,5 @@ Vue.component('answer-text', {
 			this.structObj.struct.value = newValue
 			this.$emit('update', this.structObj.struct)
 		}
-	},
-
-	watch: {
-		data (){ this.structObj = new AnswerStructText( this.data ) },
 	}
 })

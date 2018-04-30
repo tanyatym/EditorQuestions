@@ -23,7 +23,7 @@
 </head>
 <body>
 <div id="app">
-    <q-group :group-data="data" @update="saveQuestionnaire" :id="0"/>
+    <q-group :struct-data="data" @update="saveQuestionnaire" :id="0"/>
 </div>
 
 <!-- GROUP -->
@@ -38,21 +38,13 @@
 			<el-collapse-item 
 				v-for="(item, index) in collection" 
 				:title = "labels[item.type] + ' ' + (index + 1)"
-				:name = "index"
-				:key="(gIndex +'-'+ index)"
+				:key="(item.type +'-'+ index)"
 				:class="['collection-item']">
-				<q-group
-					v-if="item.type=='group'"
-					:group-data="item"
-					:id="(gIndex +'-'+ index)"
+				<component 
+					v-bind:is="(item.type=='group') ? 'q-group' : 'question'" 
+					:struct-data="item" 
 					@update="function(v){ updateItem(index, v)}">
-				</q-group>
-				<question v-else="" 
-					class="question"
-					:index="index"
-					:question-data="item" 
-					@update="function(v){ updateItem(index, v)}">
-				</question>
+				</component>
 				<el-button circle icon="el-icon-close" class="minus" @click="deleteFromCollection(index)"/>
 			</el-collapse-item>
 		</el-collapse>

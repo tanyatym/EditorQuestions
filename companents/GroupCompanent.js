@@ -1,11 +1,11 @@
 Vue.component('q-group', {
 	template: '#group',
 
-	props: [ 'groupData', 'origName', 'origCollection', 'gIndex', 'id'],
+	props: [ 'structData' ],
 	
 	data: function(){
 		return {
-			groupObj: new QGroup( this.groupData ),
+			groupObj: new QGroup( this.structData ),
 			open: true,
 			labels: {
 				question: 'Вопрос',
@@ -17,7 +17,10 @@ Vue.component('q-group', {
 	computed: {
 		name (){ return this.groupObj.struct.name }, 
 		collection (){ return this.groupObj.struct.collection },
-		activeNames (){ return Array.from(this.groupObj.struct.collection.keys()) }
+		activeNames:{ 
+			get (){ return Array.from(this.groupObj.struct.collection.keys()) },
+			set (newValue){ }
+		}
 	},
 
 	methods: {
@@ -35,10 +38,6 @@ Vue.component('q-group', {
 			if( updated ) this.$emit( 'update', updated )
 		},
 
-		askDelMyself: function(){
-			this.$emit('delgroup', this.gIndex)
-		},
-
 		deleteFromCollection: function( index ){
 			this.$emit( 'update', this.groupObj.deleteFromCollection( index ))
 		},
@@ -46,16 +45,5 @@ Vue.component('q-group', {
 		updateItem (index, newData) {
 			this.$emit( 'update', this.groupObj.updateItem( index, newData ))
 		},
-	},
-
-	// watch: {
-	// 	origCollection: function() {
-	// 		this.collection = this.origCollection
-	// 		this.activeNames = Array.from(this.origCollection.keys())
-	// 	},
-		
-	// 	origName: function() {
-	// 		this.name = this.origName
-	// 	}
-	// }
+	}
 })
