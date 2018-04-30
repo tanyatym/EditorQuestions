@@ -130,7 +130,7 @@ function AnswerStructList(data) {
 	}
 
 	this.addNewItem = function (){
-		this.struct.list.push( answerStructByType(this.contentType).struct )
+		this.struct.list.push( answerStructByType(this.struct.contentType).struct )
 		return this.struct
 	}
 	
