@@ -11,11 +11,7 @@ Vue.component('answer-list', {
 	computed: {
 		componentNameOfContent (){ return 'answer-' + this.answerList.struct.contentType },
 		
-		list (){ 
-			console.log("\nComponent 'answer-list' call -> list")
-			console.log( this.answerList.struct.list )
-			return this.answerList.struct.list 
-		}
+		list (){ return this.answerList.struct.list }
 	},
 
 	methods: {

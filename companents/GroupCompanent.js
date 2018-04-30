@@ -16,10 +16,7 @@ Vue.component('q-group', {
 
 	computed: {
 		name (){ return this.groupObj.struct.name }, 
-		collection (){ 
-			console.log("\n GROUp COLLECTION")
-			console.log(this.groupObj.struct.collection)
-			return this.groupObj.struct.collection },
+		collection (){ return this.groupObj.struct.collection },
 		activeNames (){ return Array.from(this.groupObj.struct.collection.keys()) }
 	},
 
@@ -46,10 +43,8 @@ Vue.component('q-group', {
 			this.$emit( 'update', this.groupObj.deleteFromCollection( index ))
 		},
 
-		updateQuestion (index, newData) {
+		updateItem (index, newData) {
 			this.$emit( 'update', this.groupObj.updateItem( index, newData ))
-			console.log("\nGROUP updateQuestion -> collection:")
-			console.log(this.collection)
 		},
 	},
 

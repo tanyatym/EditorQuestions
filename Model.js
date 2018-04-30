@@ -38,8 +38,6 @@ function Question( data ){
 	}
 
 	this.setFromData = function( data ){
-		console.log( "\nQUESTION.setFromData -> data" )
-		console.log( data )
 		if(typeof data !== "object" || data.type !== this.struct.type) return
 		Object.keys( this.struct ).forEach( key => {
 			if(data.hasOwnProperty( key )) this.struct[key] = data[key]

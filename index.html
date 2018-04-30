@@ -23,44 +23,43 @@
 </head>
 <body>
 <div id="app">
-    <q-group :group-data="data" :id="0"/>
+    <q-group :group-data="data" @update="saveQuestionnaire" :id="0"/>
 </div>
 
 <!-- GROUP -->
 <template id="group">
 	<section>
-	<header>
-		<el-row class="title"> 
-			<input class="input-group" :value="name" @input="updateName"/>
-		</el-row>
-	</header>
-    <el-collapse v-model="activeNames" class="group-content">
-		<el-collapse-item 
-			v-for="(item, index) in collection" 
-			:title = "labels[item.type] + ' ' + (index + 1)"
-			:name = "index"
-			:key="(gIndex +'-'+ index)"
-			:class="['collection-item']">
-			<q-group
-				v-if="item.type=='group'"
-				:group-data="item"
-				:id="(gIndex +'-'+ index)"
-			 @delgroup="deleteFromCollection">
-			</q-group>
-			<question v-else="" 
-				class="question"
-				:index="index"
-				:question-data="item" 
-				@delqustion="deleteFromCollection"
-				@update="function(v){ updateQuestion(index, v)}">
-			</question>
-			<el-button circle icon="el-icon-close" class="minus" @click="deleteFromCollection(index)"/>
-		</el-collapse-item>
-    </el-collapse>
-	<footer>
-		<el-button icon="el-icon-edit-outline" class="plusQ" @click="addQuestion">Добавить Вопрос</el-button>
-		<el-button icon="el-icon-menu" class="plus" @click="addGroup">Добавить Раздел</el-button>
-	</footer>
+		<header>
+			<el-row class="title"> 
+				<input class="input-group" :value="name" @input="updateName"/>
+			</el-row>
+		</header>
+		<el-collapse v-model="activeNames" class="group-content">
+			<el-collapse-item 
+				v-for="(item, index) in collection" 
+				:title = "labels[item.type] + ' ' + (index + 1)"
+				:name = "index"
+				:key="(gIndex +'-'+ index)"
+				:class="['collection-item']">
+				<q-group
+					v-if="item.type=='group'"
+					:group-data="item"
+					:id="(gIndex +'-'+ index)"
+					@update="function(v){ updateItem(index, v)}">
+				</q-group>
+				<question v-else="" 
+					class="question"
+					:index="index"
+					:question-data="item" 
+					@update="function(v){ updateItem(index, v)}">
+				</question>
+				<el-button circle icon="el-icon-close" class="minus" @click="deleteFromCollection(index)"/>
+			</el-collapse-item>
+		</el-collapse>
+		<footer>
+			<el-button icon="el-icon-edit-outline" class="plusQ" @click="addQuestion">Добавить Вопрос</el-button>
+			<el-button icon="el-icon-menu" class="plus" @click="addGroup">Добавить Раздел</el-button>
+		</footer>
     </section>
 </template>
 
@@ -81,7 +80,8 @@
 			<el-option v-for="(lable, key) in answerTypeLables" 
 				:value="key" 
 				:key="key"
-				:label="lable"></el-option>
+				:label="lable">
+			</el-option>
 		</el-select>
 
 		<div class="answerStruct">
@@ -149,6 +149,13 @@
 	
 	var vm = new Vue({
 		el:   '#app',
+		methods: {
+			saveQuestionnaire (questData){
+				console.log("\nThe QUESTIONNAIRE:")
+				console.log(questData)
+				console.log(JSON.stringify(questData))
+			}
+		},
 		data: {
 			data:{
 				type: 'group',
