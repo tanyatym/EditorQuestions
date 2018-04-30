@@ -7,11 +7,10 @@
     <link rel="stylesheet" href="style.css">
 	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
 	
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-<!-- import JavaScript -->
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
 	<script src="Model.js"></script>
     <script src="companents/GroupCompanent.js"></script>
@@ -27,6 +26,7 @@
     <q-group :orig-name="title" :orig-collection="collection" :id="0"/>
 </div>
 
+<!-- GROUP -->
 <template id="group">
 	<section>
 	<header>
@@ -48,13 +48,14 @@
 				:orig-collection="item.collection"
 				:g-index="index"
 				:id="(gIndex +'-'+ index)"
-				v-on:delgroup="deleteFromCollection">
+			 @delgroup="deleteFromCollection">
 			</q-group>
 			<question v-else="" 
 				class="question"
 				:index="index"
 				:question-data="item" 
-				v-on:delqustion="deleteFromCollection">
+				@delqustion="deleteFromCollection"
+				@update="function(v){ updateQuestion(index, v)}">
 			</question>
 		</el-collapse-item>
         <!-- </el-collapse>	 -->
@@ -66,50 +67,56 @@
     </section>
 </template>
 
-
+<!-- QUESTION -->
 <template id="question">
     <div class="question-content">
         <header>
-            <textarea class="input-question" v-model="text"></textarea>
+            <textarea class="input-question" :value="text" @input="updateText"></textarea>
             <el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
 		</header>
-		<el-select v-model="answerType" v-on:input="updateAnswerForm" placeholder="Тип Ответа">
+		<el-select :value="answerType" @input="resetAnswerStruct" placeholder="Тип Ответа">
 			<el-option v-for="(lable, key) in answerTypeLables" :value="key" :key="key">{{ lable }}</el-option>
 		</el-select>
 
-		<div class="answerForm">
-			<component v-bind:is="currentAnswerComponent" :data="answerForm"></component>
+		<div class="answerStruct">
+			<component v-bind:is="componentNameOfContent" :data="answerStruct" @update="updateAnswerStruct"></component>
 		</div>
     </div>
 </template>
 
+<!-- ANSWER TYPES -->
+
+<!-- LIST -->
+<template id="answer-type-list">
+	<div class="answer-type list ">
+		<ul class="answer-list">
+			<li v-for="(item, index) in list">
+				<component v-bind:is="componentNameOfContent" 
+					:data="item" 
+					 @update="function(v){ updateAnswer(index, v)}"
+					class="input-question"></component>
+				<el-button circle icon="el-icon-close" class="minus" @click="deleteAnswer(index)"/>
+			</li>
+			<el-button icon="el-icon-edit-outline" class="plusQ" @click="addToList">Добавить вариант ответа</el-button>
+		</ul>
+	</div>
+</template>
+
+<!-- TEXT -->
+<template id="answer-type-text">
+	<div class="answer-type text">
+		<el-input placeholder="Введите вариант ответа" :value="value" @input="updateValue"></el-input>	
+	</div>
+</template>
+
+<!-- NUMBER -->
 <template id="answer-type-number">
 	<div class="answer-type number">
 		<el-input-number  class="input-number" v-model="value">
 	</div>
 </template>
 
-<template id="answer-type-text">
-	<div class="answer-type text">
-		<el-input placeholder="Введите ответ" v-model="value" v-on:input="reportChange"></el-input>	
-	</div>
-</template>
-
-<template id="answer-type-list">
-	<div class="answer-type list ">
-		<ul class="answer-list">
-			<li v-for="(item, index) in list">
-				<component v-bind:is="currentAnswerComponent" 
-				:data="item" 
-				v-on:update="function(v){ updateAnswer(v, index)}"
-				class="input-question"></component>
-				<el-button circle icon="el-icon-close" class="minus" @click="deleteAnswer(index)"/>
-			</li>
-			<el-button  icon="el-icon-edit-outline" class="plusQ" @click="addToList">Добавить вариант ответа</el-button>
-		</ul>
-	</div>
-</template>
-
+<!-- RANGE -->
 <template id="answer-type-range">
 	<el-row class="answer-type-range" type="flex" :gutter="20">
 		<el-col >с
@@ -141,14 +148,15 @@
 			collection: [
 				{
 					type:       "group",
-					name:       'GROUP 1',
+					name:       'Группа Вопросов 1',
 					collection: [{
 						type: "question",
-						text: "как тебя зовут?",
-						answerForm:{
+						text: "Kак тебя зовут?",
+						answerType: 'list',
+						answerStruct:{
 							type: "list",
 							contentType: "text",
-							multyple: false,
+							multyple: true,
 							list: [
 								{
 									type: "text",

@@ -3,18 +3,24 @@ Vue.component('answer-text', {
 
 	props: ['data'],
 
-	data: function(){update
+	data: function(){
 		return {
-			value: this.data.value,
+			structObj: new AnswerStructText( this.data ),
 	    }
 	},
 
+	computed: {
+		value () { return this.structObj.struct.value },
+	},
+
 	methods: {
-		reportChange: function(){
-			thid.$emit("update", this.value)
+		updateValue (newValue){
+			this.structObj.struct.value = newValue
+			this.$emit('update', this.structObj.struct)
 		}
 	},
+
 	watch: {
-		data: function() {this.value = this.data.value},
+		data (){ this.structObj = new AnswerStructText( this.data ) },
 	}
 })

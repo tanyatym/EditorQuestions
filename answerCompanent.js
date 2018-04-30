@@ -23,7 +23,7 @@ Vue.component('answer', {
 			deleteFromCollection: function( index ){
 				this.collection.splice(index, 1)
 			},
-			reportChange: function(){
+			updateValue: function(){
 				this.$emit()
 			}
 		},

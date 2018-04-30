@@ -11,8 +11,21 @@ Vue.component('answer-range', {
 		}
 	},
 
-	methods: {
+	computed: {
+		storableObject (){ 
+			return { 
+				type: "number", 
+				value: this.value 
+			}
+		}
 	},
+
+	methods: {
+		updateValue (){
+			this.$emit('update', this.storableObject )
+		}
+	},
+
 	watch: {
 		data: function() {
 			this.min = this.data.min

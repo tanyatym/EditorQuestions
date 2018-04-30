@@ -5,52 +5,48 @@ Vue.component('question', {
 	
 	data:  function(){
 		return {
+			questionObj: new Question( this.questionData ),
 			answerTypeLables: {
-				list:"Список",
-				range:"Шкала",
-				number:"Число",
-				text:"Текст"
+				list: "Список",
+				range: "Шкала",
+				number: "Число",
+				text: "Текст"
 			},
-			answerType: this.questionData.answerForm ? this.questionData.answerForm.type : "text",
-			answerForm: this.questionData.answerForm ? answerFormByType(this.answerType, this.questionData.answerForm) : new AnswerFormText()
 		}
 	},
 
 	computed:{
-		text: function(){
-			return this.questionData.text || ""
-		},
-		
-		
-		currentAnswerComponent: function(){
-			return 'answer-' + this.answerType
-		}
+		text (){ return this.questionObj.struct.text },
+		answerType (){ return this.questionObj.struct.answerType },
+		answerStruct (){ return this.questionObj.struct.answerStruct },
+		componentNameOfContent (){ return 'answer-' + this.answerType },
 	},
 
 	methods: {
-		addAnswer: function(){
-			this.collection.push('answer')
+		askDelMyself: function(){
+			this.$emit( 'delqustion', this.index )
+		},
+
+		resetAnswerStruct: function( type ){
+			this.$emit( 'update', this.questionObj.resetAnswerStruct( type ))
 		},
 		
-		askDelMyself: function(){
-			this.$emit('delqustion', this.index)
-
+		updateText ( event ){
+			this.update({ text: event.target.value })
 		},
 
-		deleteAnswer: function( index ){
-			this.answers.splice(index, 1)
+		updateAnswerStruct ( newData ){
+			this.$emit( 'update', this.questionObj.updateAnswerStruct( newData ))
 		},
-		updateAnswerForm: function(){
-			this.answerForm = answerFormByType(this.answerType) 
-		},
+
+		update ( newData ){
+			this.$emit( 'update', this.questionObj.update( newData ))
+		}
 	},
 
 	// watch: {
-	// 	questionData: function() {
-	// 		this.text = this.questionData.text
-	// 		this.answerType = this.questionData.answerForm.type
-	// 		this.answerForm = this.questionData.answerForm
-	// 	}
-		
+	// 	questionData () {
+	// 		this.questionObj = new Question( this.questionData )
+	// 	}	
 	// }
 })
