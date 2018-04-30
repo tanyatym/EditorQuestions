@@ -23,7 +23,7 @@
 </head>
 <body>
 <div id="app">
-    <q-group :orig-name="title" :orig-collection="collection" :id="0"/>
+    <q-group :group-data="data" :id="0"/>
 </div>
 
 <!-- GROUP -->
@@ -31,22 +31,19 @@
 	<section>
 	<header>
 		<el-row class="title"> 
-			<input class="input-group" v-model="name"/>
+			<input class="input-group" :value="name" @input="updateName"/>
 		</el-row>
-		<el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
 	</header>
     <el-collapse v-model="activeNames" class="group-content">
-        <!-- <el-collapse-item class="content" v-if="true"> -->
-		<el-collapse-item v-for="(item, index)  in collection" 
-			:title = "item.type + ' ' + (index + 1)"
+		<el-collapse-item 
+			v-for="(item, index) in collection" 
+			:title = "labels[item.type] + ' ' + (index + 1)"
 			:name = "index"
 			:key="(gIndex +'-'+ index)"
-			:class="item.type">
+			:class="['collection-item']">
 			<q-group
 				v-if="item.type=='group'"
-				:orig-name="item.name"
-				:orig-collection="item.collection"
-				:g-index="index"
+				:group-data="item"
 				:id="(gIndex +'-'+ index)"
 			 @delgroup="deleteFromCollection">
 			</q-group>
@@ -57,12 +54,12 @@
 				@delqustion="deleteFromCollection"
 				@update="function(v){ updateQuestion(index, v)}">
 			</question>
+			<el-button circle icon="el-icon-close" class="minus" @click="deleteFromCollection(index)"/>
 		</el-collapse-item>
-        <!-- </el-collapse>	 -->
     </el-collapse>
 	<footer>
-		<el-button  icon="el-icon-edit-outline" class="plusQ" @click="addQuestion">Добавить Вопрос</el-button>
-		<el-button  icon="el-icon-menu" class="plus" @click="addGroup">Добавить Раздел</el-button>
+		<el-button icon="el-icon-edit-outline" class="plusQ" @click="addQuestion">Добавить Вопрос</el-button>
+		<el-button icon="el-icon-menu" class="plus" @click="addGroup">Добавить Раздел</el-button>
 	</footer>
     </section>
 </template>
@@ -71,11 +68,20 @@
 <template id="question">
     <div class="question-content">
         <header>
-            <textarea class="input-question" :value="text" @input="updateText"></textarea>
-            <el-button circle icon="el-icon-close" class="minus" @click="askDelMyself"/>
+			<el-input
+				type="textarea"
+				autosize
+				placeholder="Введите Вопрос"
+				:value="text"
+				size="medium"
+				@input="updateText">
+			</el-input>
 		</header>
 		<el-select :value="answerType" @input="resetAnswerStruct" placeholder="Тип Ответа">
-			<el-option v-for="(lable, key) in answerTypeLables" :value="key" :key="key">{{ lable }}</el-option>
+			<el-option v-for="(lable, key) in answerTypeLables" 
+				:value="key" 
+				:key="key"
+				:label="lable"></el-option>
 		</el-select>
 
 		<div class="answerStruct">
@@ -144,39 +150,41 @@
 	var vm = new Vue({
 		el:   '#app',
 		data: {
-			title:      'АНКЕТА',
-			collection: [
-				{
-					type:       "group",
-					name:       'Группа Вопросов 1',
-					collection: [{
-						type: "question",
-						text: "Kак тебя зовут?",
-						answerType: 'list',
-						answerStruct:{
-							type: "list",
-							contentType: "text",
-							multyple: true,
-							list: [
-								{
-									type: "text",
-									value: "лабудень 1"
-								},
-								{
-									type: "text",
-									value: "лабудень 2"
-								},
-								{
-									type: "text",
-									value: "лабудень 3"
-								}
-							],
-							
-						}
-					}]
-				}
-				
-			]
+			data:{
+				type: 'group',
+				name:      'АНКЕТА',
+				collection: [
+					{
+						type:       "group",
+						name:       'Группа Вопросов 1',
+						collection: [{
+							type: "question",
+							text: "Kак тебя зовут?",
+							answerType: 'list',
+							answerStruct:{
+								type: "list",
+								contentType: "text",
+								multyple: true,
+								list: [
+									{
+										type: "text",
+										value: "лабудень 1"
+									},
+									{
+										type: "text",
+										value: "лабудень 2"
+									},
+									{
+										type: "text",
+										value: "лабудень 3"
+									}
+								],
+								
+							}
+						}]
+					}	
+				]
+			}
 		}
 	})
 

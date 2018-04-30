@@ -1,24 +1,41 @@
 Vue.component('q-group', {
-	props: ['origName', 'origCollection', 'gIndex', 'id'],
+	template: '#group',
 
+	props: [ 'groupData', 'origName', 'origCollection', 'gIndex', 'id'],
+	
 	data: function(){
 		return {
-			name: this.origName,
-			collection: this.origCollection,
+			groupObj: new QGroup( this.groupData ),
 			open: true,
-			activeNames: Array.from(this.origCollection.keys())
+			labels: {
+				question: 'Вопрос',
+				group: 'Группа',
+			}
 		}
 	},
 
-	template: '#group',
+	computed: {
+		name (){ return this.groupObj.struct.name }, 
+		collection (){ 
+			console.log("\n GROUp COLLECTION")
+			console.log(this.groupObj.struct.collection)
+			return this.groupObj.struct.collection },
+		activeNames (){ return Array.from(this.groupObj.struct.collection.keys()) }
+	},
 
 	methods: {
+		updateName (event){
+			this.$emit( 'update', this.groupObj.update({ name: event.target.value }))
+		},
+
 		addGroup: function(){
-			this.collection.push(new QGroup())
+			const updated = this.groupObj.addToCollection( 'group' )
+			if( updated ) this.$emit( 'update', updated )
 		},
 		
 		addQuestion: function(){
-			this.collection.push(new Question())
+			const updated = this.groupObj.addToCollection( 'question' )
+			if( updated ) this.$emit( 'update', updated )
 		},
 
 		askDelMyself: function(){
@@ -26,24 +43,24 @@ Vue.component('q-group', {
 		},
 
 		deleteFromCollection: function( index ){
-			this.collection.splice(index, 1)
+			this.$emit( 'update', this.groupObj.deleteFromCollection( index ))
 		},
 
 		updateQuestion (index, newData) {
-			this.collection[index] = newData
+			this.$emit( 'update', this.groupObj.updateItem( index, newData ))
 			console.log("\nGROUP updateQuestion -> collection:")
 			console.log(this.collection)
-		}
+		},
 	},
 
-	watch: {
-		origCollection: function() {
-			this.collection = this.origCollection
-			this.activeNames = Array.from(this.origCollection.keys())
-		},
+	// watch: {
+	// 	origCollection: function() {
+	// 		this.collection = this.origCollection
+	// 		this.activeNames = Array.from(this.origCollection.keys())
+	// 	},
 		
-		origName: function() {
-			this.name = this.origName
-		}
-	}
+	// 	origName: function() {
+	// 		this.name = this.origName
+	// 	}
+	// }
 })

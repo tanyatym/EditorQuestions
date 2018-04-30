@@ -1,3 +1,4 @@
+// QUESTION
 function Question( data ){
 	this.struct = {
 		type: 'question',
@@ -47,12 +48,57 @@ function Question( data ){
 
 	if(data) this.setFromData( data )
 }
- 
+
+// GROUP
 function QGroup( data ){
 	this.struct = {
-		name: "Новая группа",
+		name: '',
 		type: 'group',
 		collection: [],
+	}
+
+	this.update = function( newData ){
+		if( typeof newData !== "object" ) return
+		newData.type = this.struct.type
+		this.setFromData( newData )
+		return this.struct
+	}
+	
+	this.addQuestion = function(){
+		this.struct.collection.push( new Question().struct )
+		return this.struct
+	}
+
+	this.addToCollection = function( type ){
+		var newItem = null
+		switch( type ){
+			case 'group': 
+				newItem = new QGroup().struct
+				break
+			case 'question':
+				newItem = new Question().struct
+		}
+		if( newItem ){
+			this.struct.collection.push( newItem )
+			return this.struct
+		}
+		return null
+	}
+
+	this.deleteFromCollection = function( index ){
+		this.struct.collection.splice(index, 1)
+		return this.struct
+	}
+
+	this.updateItem = function( index, newData ){
+		const curType = this.struct.collection[index].type
+		if( typeof newData === 'object' && newData.type === curType ){
+			this.struct.collection[index] = newData
+		}else{
+			console.error( 'QGroup.updateItem ERROR: newData is invalid:' )
+			console.error( newData )
+		}
+		return this.struct
 	}
 
 	this.setFromData = function( data ){
@@ -64,6 +110,8 @@ function QGroup( data ){
 
 	if(data) this.setFromData( data )
 }
+
+// ANSWER STRUCTs
 
 function answerStructByType( type, data ){
 	switch (type){
